@@ -14,7 +14,7 @@ function PostBeginPlay()
 		SideCam = CreateCamera(SideCameraClass);
 }
 
-function FindBestCameraType(Actor CameraTarget)
+protected function GameCameraBase FindBestCameraType(Actor CameraTarget)
 {
 	local GameCameraBase BestChoice;
 
