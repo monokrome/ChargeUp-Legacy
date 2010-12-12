@@ -1,0 +1,13 @@
+Binaries/
+Engine/
+UDKGame/
+
+Development/Flash/
+Development/Src/*
+!/Development/Src/ChargeUp/
+
+Thumbs.db
+
+*.log
+.*
+
