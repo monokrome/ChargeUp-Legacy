@@ -13,8 +13,6 @@ function UpdateViewTarget(out TViewTarget OutVT, float DeltaTime)
 	OrigPOV = OutVT.POV;
 	OutVT.POV.FOV = DefaultFOV;
 
-	`log(CameraStyle);
-
 		// Check if we are using a fixed camera. If we are, then get it's view.
 	CamActor = CameraActor(OutVT.Target);
 	if (CamActor != None)
@@ -30,6 +28,10 @@ function UpdateViewTarget(out TViewTarget OutVT, float DeltaTime)
 		if (Pawn(OutVT.Target) == None || !Pawn(OutVT.Target).CalcCamera(DeltaTime, OutVT.POV.Location, OutVT.POV.Rotation, OutVT.POV.FOV))
 		{
 			bDoNotApplyModifiers = false;
+
+			// Temporary.
+			if (CameraStyle == '')
+				CameraStyle = 'Side';
 
 			switch (CameraStyle)
 			{
