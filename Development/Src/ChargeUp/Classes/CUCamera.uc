@@ -19,7 +19,12 @@ protected function GameCameraBase FindBestCameraType(Actor CameraTarget)
 {
  	local GameCameraBase BestCam;
 
- 	if (CameraStyle == 'default')
+	if (CameraStyle == 'Side')
+	{
+		BestCam = SideCam;
+	}
+
+ 	else if (CameraStyle == 'default')
 	{
 		if (CameraActor(CameraTarget) != None)
 			BestCam = FixedCam;
@@ -32,7 +37,6 @@ protected function GameCameraBase FindBestCameraType(Actor CameraTarget)
 
 defaultproperties
 {
-	CameraStyle = Side
 	SideCameraClass = class'CUGameSideCamera'
 	DefaultFOV = 90.0f;
 }

@@ -26,9 +26,9 @@ simulated function UpdateCamera(Pawn P, GamePlayerCamera CameraActor, float Delt
 		OutVT.POV.Rotation.Roll = OutVT.POV.Rotation.Pitch;
 		OutVT.POV.Rotation.Yaw = OutVT.POV.Rotation.Pitch;
 
-		OutVT.POV.Location.X = OutVT.Target.Location.X; //- 32
-		OutVT.POV.Location.Y = OutVT.Target.Location.Y + 40;
-		OutVT.POV.Location.Z = OutVT.Target.Location.Z + 50;
+		OutVT.POV.Location.X = OutVT.Target.Location.X - 32;
+		OutVT.POV.Location.Y = OutVT.Target.Location.Y + 50;
+		OutVT.POV.Location.Z = OutVT.Target.Location.Z + 60;
 
 		OutVT.POV.Location = OutVT.POV.Location - Vector(OutVT.POV.Rotation) * CamDistance;
 	}
@@ -49,5 +49,5 @@ function OnBecomeActive(GameCameraBase OldCamera)
 DefaultProperties
 {
 	DefaultFOV = 90
-	CamDistance = 200.0f
+	CamDistance = 300.0f
 }

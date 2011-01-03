@@ -1,4 +1,4 @@
-class CUPlayerController extends UTPlayerController;
+class CUPlayerController extends UDKPlayerController;
 
 state PlayerWalking
 {
