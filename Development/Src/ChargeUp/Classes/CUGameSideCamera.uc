@@ -22,13 +22,14 @@ simulated function UpdateCamera(Pawn P, GamePlayerCamera CameraActor, float Delt
 		// Use the location of our target if it exists
 	if (OutVT.Target != None)
 	{
-		OutVT.POV.Rotation.Pitch = (0 * DegToRad) * RadToUnrRot;
-		OutVT.POV.Rotation.Roll = OutVT.POV.Rotation.Pitch;
-		OutVT.POV.Rotation.Yaw = OutVT.POV.Rotation.Pitch;
+			// 0 = (0 * DegToRad) * RadToUnrRot
+		OutVT.POV.Rotation.Pitch = 0.0f;
+		OutVT.POV.Rotation.Roll = 0.0f;
+		OutVT.POV.Rotation.Yaw = 0.0f;
 
 		OutVT.POV.Location.X = OutVT.Target.Location.X - 32;
 		OutVT.POV.Location.Y = OutVT.Target.Location.Y + 50;
-		OutVT.POV.Location.Z = OutVT.Target.Location.Z + 60;
+		OutVT.POV.Location.Z = OutVT.Target.Location.Z + 60 - OutVT.Controller.Pawn.JumpZ;
 
 		OutVT.POV.Location = OutVT.POV.Location - Vector(OutVT.POV.Rotation) * CamDistance;
 	}
@@ -49,5 +50,5 @@ function OnBecomeActive(GameCameraBase OldCamera)
 DefaultProperties
 {
 	DefaultFOV = 90
-	CamDistance = 300.0f
+	CamDistance = 250.0f
 }
