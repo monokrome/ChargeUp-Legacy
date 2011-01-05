@@ -1,5 +1,26 @@
 class CUPlayerController extends UDKPlayerController;
 
+var Bool IsWalkingBackwards; // Are we currently walking backwards?
+
+/**
+ * Limits our pawn from rotating away from looking parellel of our camera
+ */
+event Rotator LimitViewRotation(Rotator ViewRotation, float ViewPitchMin, float ViewPitchMax)
+{
+	ViewPitchMin = 0;
+	ViewPitchMax = 0;
+
+	ViewRotation = super.LimitViewRotation(ViewRotation, ViewPitchMax, ViewPitchMin);
+
+	ViewRotation.Yaw = PlayerCamera.Rotation.Yaw + (90 * DegToUnrRot);
+	
+		// TODO: Interpolation for yaw rotation
+	if (IsWalkingBackwards)
+		ViewRotation.Yaw += 180 * DegToUnrRot;
+
+	return ViewRotation;
+}
+
 state PlayerWalking
 {
 	ignores SeePlayer, HearNoise, Bump;
@@ -15,6 +36,10 @@ state PlayerWalking
 		Pawn.Acceleration.X = 0;
 		Pawn.Acceleration.Y = 1 * PlayerInput.aStrafe;
 		Pawn.Acceleration.Z = 0;
+
+			// Check if we have changed to walking backwards or not
+		if ((PlayerInput.aStrafe < 0 && !IsWalkingBackwards) || (PlayerInput.aStrafe > 0 && IsWalkingBackwards))
+			IsWalkingBackwards = !IsWalkingBackwards;
 
 		// Pawn.Acceleration.Y = Pawn.AccelRate * Normal(Pawn.Acceleration);
 
