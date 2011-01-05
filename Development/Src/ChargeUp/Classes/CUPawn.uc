@@ -9,6 +9,11 @@ simulated function name GetDefaultCameraMode(PlayerController Requestedby)
 	return 'Side';
 }
 
+simulated singular event Rotator GetBaseAimRotation()
+{
+	return Rotation;
+}
+
 defaultproperties
 {
 }
