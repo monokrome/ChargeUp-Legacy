@@ -70,7 +70,7 @@ state PlayerWalking
 			MovementDirectionChanged = true;
 		}
 
-		// Pawn.Acceleration = Pawn.AccelRate * Normal(Pawn.Acceleration);
+		Pawn.Acceleration = Pawn.AccelRate * Normal(Pawn.Acceleration);
 
 		TempRot.Pitch = Pawn.Rotation.Pitch;
 		TempRot.Roll = 0;
