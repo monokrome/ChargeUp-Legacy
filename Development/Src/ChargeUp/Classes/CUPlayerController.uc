@@ -1,22 +1,46 @@
 class CUPlayerController extends UDKPlayerController;
 
 var Bool IsWalkingBackwards; // Are we currently walking backwards?
+var bool MovementDirectionChanged; // True when a position change has occured
+
+var float DirectionChangedYawAlpha;
+var float DirectionChangedInitialYaw;
+
+var const float DirectionChangedYawRotationSpeed;
 
 /**
  * Limits our pawn from rotating away from looking parellel of our camera
  */
 event Rotator LimitViewRotation(Rotator ViewRotation, float ViewPitchMin, float ViewPitchMax)
 {
+	local float FinalYaw;
+
 	ViewPitchMin = 0;
 	ViewPitchMax = 0;
 
 	ViewRotation = super.LimitViewRotation(ViewRotation, ViewPitchMax, ViewPitchMin);
 
-	ViewRotation.Yaw = PlayerCamera.Rotation.Yaw + (90 * DegToUnrRot);
-	
-		// TODO: Interpolation for yaw rotation
 	if (IsWalkingBackwards)
-		ViewRotation.Yaw += 180 * DegToUnrRot;
+		FinalYaw = 270 * DegToUnrRot;
+	else
+		FinalYaw = PlayerCamera.Rotation.Yaw + (90 * DegToUnrRot);
+
+	if (MovementDirectionChanged)
+	{
+		if (DirectionChangedYawAlpha >= 1.0f)
+		{
+			DirectionChangedYawAlpha = 1.0f;
+			MovementDirectionChanged = false;
+		}
+
+		ViewRotation.Yaw = Lerp(DirectionChangedInitialYaw, FinalYaw, DirectionChangedYawAlpha);
+
+		DirectionChangedYawAlpha += DirectionChangedYawRotationSpeed;
+	}
+	else
+	{
+		ViewRotation.Yaw = FinalYaw;
+	}
 
 	return ViewRotation;
 }
@@ -34,14 +58,19 @@ state PlayerWalking
 			Pawn.SetRemoteViewPitch(Rotation.Pitch);
 
 		Pawn.Acceleration.X = 0;
-		Pawn.Acceleration.Y = 1 * PlayerInput.aStrafe;
+		Pawn.Acceleration.Y = PlayerInput.aStrafe;
 		Pawn.Acceleration.Z = 0;
 
 			// Check if we have changed to walking backwards or not
 		if ((PlayerInput.aStrafe < 0 && !IsWalkingBackwards) || (PlayerInput.aStrafe > 0 && IsWalkingBackwards))
+		{
 			IsWalkingBackwards = !IsWalkingBackwards;
+			DirectionChangedInitialYaw = Pawn.Rotation.Yaw;
+			DirectionChangedYawAlpha = 0.0f;
+			MovementDirectionChanged = true;
+		}
 
-		// Pawn.Acceleration.Y = Pawn.AccelRate * Normal(Pawn.Acceleration);
+		// Pawn.Acceleration = Pawn.AccelRate * Normal(Pawn.Acceleration);
 
 		TempRot.Pitch = Pawn.Rotation.Pitch;
 		TempRot.Roll = 0;
@@ -112,4 +141,5 @@ state PlayerWalking
 DefaultProperties
 {
 	CameraClass = class'CUCamera'
+	DirectionChangedYawRotationSpeed = 0.15f
 }
