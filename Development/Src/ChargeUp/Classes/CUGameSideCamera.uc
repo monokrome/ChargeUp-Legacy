@@ -6,6 +6,11 @@ var() const protected float DefaultFOV;
 var() protected float CamDistance;
 var() protected float CamOffset;
 
+var bool LastLookAheadDirection;
+var bool LookAheadMovementDirectionChanged;
+var float LookAheadInterpolationAlpha;
+var float LastLookAheadLocation;
+
 	// Set up the location, rotation, and FOV of our camera
 simulated function UpdateCamera(Pawn P, GamePlayerCamera CameraActor, float DeltaTime, out TViewTarget OutVT)
 {
@@ -26,7 +31,8 @@ simulated function UpdateCamera(Pawn P, GamePlayerCamera CameraActor, float Delt
 		// Use the location of our target if it exists
 	if (OutVT.Target != None)
 	{
-			// 0 = (0 * DegToRad) * RadToUnrRot
+		LastLookAheadLocation = OutVT.POV.Location.Y;
+
 		OutVT.POV.Rotation.Pitch = 0.0f;
 		OutVT.POV.Rotation.Roll = 0.0f;
 		OutVT.POV.Rotation.Yaw = 0.0f;
@@ -43,13 +49,36 @@ simulated function UpdateCamera(Pawn P, GamePlayerCamera CameraActor, float Delt
 
 			if (PC != None)
 			{
+				if (LastLookAheadDirection != PC.IsWalkingBackwards)
+				{
+					LookAheadMovementDirectionChanged = true;
+
+					LookAheadInterpolationAlpha = 0.0f;
+
+					LastLookAheadDirection = PC.IsWalkingBackwards;
+				}
+
 				if (!PC.IsWalkingBackwards)
-					NextY = OutVT.POV.Location.Y + CamOffset;
+					NextY = OutVT.Target.Location.Y + CamOffset;
 				else
-					NextY = OutVT.POV.Location.Y - CamOffset;
-				
-					// TODO: Interpolate this movement
-				OutVT.POV.Location.Y = NextY;
+					NextY = OutVT.Target.Location.Y - CamOffset;
+
+				if (LookAheadMovementDirectionChanged == true)
+				{
+					OutVT.POV.Location.Y = Lerp(LastLookAheadLocation, NextY, LookAheadInterpolationAlpha);
+					
+					if (LookAheadInterpolationAlpha >= 1.0f)
+					{
+						LookAheadMovementDirectionChanged = false;
+						LookAheadInterpolationAlpha = 0.0f;
+					}
+				}
+				else
+				{
+					OutVT.POV.Location.Y = NextY;
+				}
+
+				LookAheadInterpolationAlpha += 0.005f;
 			}
 		}
 	}
@@ -71,5 +100,5 @@ DefaultProperties
 {
 	DefaultFOV = 90
 	CamDistance = 250.0f
-	CamOffset = 100.0f;
+	CamOffset = 200.0f;
 }
