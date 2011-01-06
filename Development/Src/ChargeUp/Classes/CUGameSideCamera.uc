@@ -31,20 +31,20 @@ simulated function UpdateCamera(Pawn P, GamePlayerCamera CameraActor, float Delt
 		// Use the location of our target if it exists
 	if (OutVT.Target != None)
 	{
-		LastLookAheadLocation = OutVT.POV.Location.Y;
-
-		OutVT.POV.Rotation.Pitch = 0.0f;
-		OutVT.POV.Rotation.Roll = 0.0f;
-		OutVT.POV.Rotation.Yaw = 0.0f;
-
-		OutVT.POV.Location.X = OutVT.Target.Location.X - 32;
-		OutVT.POV.Location.Y = OutVT.Target.Location.Y;
-		OutVT.POV.Location.Z = OutVT.Target.Location.Z + 60;
-
-		OutVT.POV.Location = OutVT.POV.Location - Vector(OutVT.POV.Rotation) * CamDistance;
-
-		if (P != None)
+		if (P != None && !P.IsInState('FeigningDeath'))
 		{
+			LastLookAheadLocation = OutVT.POV.Location.Y;
+
+			OutVT.POV.Rotation.Pitch = 0.0f;
+			OutVT.POV.Rotation.Roll = 0.0f;
+			OutVT.POV.Rotation.Yaw = 0.0f;
+
+			OutVT.POV.Location.X = OutVT.Target.Location.X - 32;
+			OutVT.POV.Location.Y = OutVT.Target.Location.Y;
+			OutVT.POV.Location.Z = OutVT.Target.Location.Z + 60;
+
+			OutVT.POV.Location = OutVT.POV.Location - Vector(OutVT.POV.Rotation) * CamDistance;
+
 			PC = CUPlayerController(P.Controller);
 
 			if (PC != None)
