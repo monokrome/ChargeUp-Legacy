@@ -16,4 +16,5 @@ simulated singular event Rotator GetBaseAimRotation()
 
 defaultproperties
 {
+	AccelRate = 750.0f;
 }
