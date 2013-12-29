@@ -5,8 +5,8 @@
 //-----------------------------------------------------------------------------
 
 $Macro SRCDIR		"..\.."
-$Macro GAMENAME 	"hl2mp" [!$SOURCESDK]
-$Macro GAMENAME 	"chargeup" [$SOURCESDK]
+
+$Macro GAMENAME 	"chargeup"
 
 $Include "$SRCDIR\game\server\server_base.vpc"
 $Include "$SRCDIR\game\server\nav_mesh.vpc" [$SOURCESDK]
@@ -16,7 +16,7 @@ $Configuration
 	$Compiler
 	{
 		$AdditionalIncludeDirectories	"$BASE;$SRCDIR\game\shared\hl2,.\hl2,.\hl2mp,$SRCDIR\game\shared\hl2mp,$SRCDIR\game\shared\Multiplayer"
-		$PreprocessorDefinitions		"$BASE;HL2MP;CHARGEUP;HL2_DLL"
+		$PreprocessorDefinitions		"$BASE;HL2MP;HL2_DLL;CHARGEUP_DLL"
 	}
 }
 
@@ -242,7 +242,7 @@ $Project "Server (ChargeUp)"
 			}
 		}
 
-		$Folder	"CHARGEUP"
+		$Folder	"ChargeUp"
 		{
 			$File	"hl2mp\hl2mp_bot_temp.cpp"
 			$File	"hl2mp\hl2mp_bot_temp.h"
