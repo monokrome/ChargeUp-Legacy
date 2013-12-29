@@ -59,7 +59,7 @@ server.dylib.dSYM/
 *.vpc.sentinel
 *.vpc_crc
 
-generated_proto/**
+**/generated_proto/**
 src/utils/sapi51/**
 game/**/bin/**
 
